@@ -15,8 +15,19 @@ use yii\web\Controller;
 class TestController extends Controller {
     
     public function actionIndex () {
-        
-        return $this->render('index');
+        $project_name= "Love Loei";
+        $count = 450+550;        
+        return $this->render('index',[
+            'value' => 10,
+            'value2' => 'hello',
+            'project_name' => $project_name,
+            'count' => $count,
+           
+        ]
+               
+                
+                
+                );
         
     }
     //put your code here
