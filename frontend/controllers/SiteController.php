@@ -72,8 +72,54 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        /////////////// COLUMN CHART ////////////////
+$sql = "SELECT s.subdistname,
+SUM(CASE WHEN p.CID<>'' THEN 1 ELSE 0 END)AS human
+FROM person p
+LEFT JOIN hdc.co_office o ON o.off_id = p.HOSPCODE
+LEFT JOIN hdc.co_subdistrict s ON s.subdistid = o.subdistid
+WHERE p.DISCHARGE = '9' AND p.NATION = '099'
+AND p.TYPEAREA IN(1,3) 
+GROUP BY o.subdistid
+ORDER BY human DESC";
+$rawData = Yii::$app->db->createCommand($sql)->queryAll();
+$main_Data = [];
+foreach ($rawData as $data) {
+$main_data[] = [
+'name' => $data['subdistname'],
+'y' => $data['human'] * 1
+];
+}
+$main = json_encode($main_data);
+        $sql_grid = "SELECT s.subdistname,
+SUM(CASE WHEN p.CID<>'' THEN 1 ELSE 0 END)AS human
+FROM person p
+LEFT JOIN hdc.co_office o ON o.off_id = p.HOSPCODE
+LEFT JOIN hdc.co_subdistrict s ON s.subdistid = o.subdistid
+WHERE p.DISCHARGE = '9' AND p.NATION = '099'
+AND p.TYPEAREA IN(1,3) 
+GROUP BY o.subdistid
+ORDER BY human DESC";
+try {
+$rawData = \Yii::$app->db->createCommand($sql_grid)->queryAll();
+} catch (\yii\db\Exception $e) {
+throw new \yii\web\ConflictHttpException('sql error');
+}
+$dataProvider = new \yii\data\ArrayDataProvider([
+//'key' => 'hoscode',
+'allModels' => $rawData,
+'pagination' => FALSE,
+/* 'pagination' => [
+'pageSize' => 10,
+], */
+]);
+/////////////// END COLUMN CHART ////////////////
+
         Yii::$app->db->open();
-        return $this->render('index');
+        return $this->render('index',[
+            'main'=> $main,
+            'dataProvider' => $dataProvider
+        ]);
     }
 
     /**

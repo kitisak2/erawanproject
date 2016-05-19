@@ -2,9 +2,8 @@
 /* @var $this yii\web\View */
 
 use miloschuman\highcharts\Highcharts;
-//use yii\grid\GridView;
-use yii\helpers\Html; //เครื่องมือส่งออก
 use kartik\grid\GridView;
+
 $this->registerJsFile('./js/chart_dial.js');
 
 $this->title = 'Love Loei';
@@ -27,7 +26,7 @@ Yii::$app->db->open();
             ?>
         </div>
 
-        <div class="col-md-8">
+        <div class="col-xs-8 col-md-8 col-sm-8">
             <div id="chart-column">
             </div>
 
@@ -106,21 +105,12 @@ Yii::$app->db->open();
             ?>    
         </div>
         <!-- end column chart -->
-        <div class="col-md-4">
-            <!--?=
-            GridView::widget([
-                'dataProvider' => $dataProvider,
-                'columns' => [
-                    'subdistname',
-                    'human',
-                // ...
-                ],
-            ])
-            ?-->
+
+
+        <div class="col-xs-4 col-sm-4 col-md-4">
             <?php
             echo GridView::widget([
                 'dataProvider' => $dataProvider,
-                'panel' => [''],  //เครื่องมือส่งออก
                 'columns' => [
                     [
                         'class' => 'yii\grid\SerialColumn',
@@ -149,42 +139,35 @@ Yii::$app->db->open();
         </div>
     </div>
 
-
     <div class="col-lg-12">
-        <div class="row">
+        <!-- donut chart -->
+        <div class="panel-body">
+            <div style="display: none">
+                <?php
+                echo Highcharts::widget([
+                    'scripts' => [
+                        'highcharts-more', // enables supplementary chart types (gauge, arearange, columnrange, etc.)
+                        'modules/exporting', // adds Exporting button/menu to chart
+                    //'themes/grid', // applies global 'grid' theme to all charts
+                    //'highcharts-3d'
+                    //'modules/drilldown'
+                    ]
+                ]);
+                ?>
+            </div>
+            <div id="pie-donut">
+            </div>
             <?php
-            $target = 20;
-            $result = 10;
-
-            $persent = 0.00;
-            if ($target > 0) {
-                $persent = $result / $target * 100;
-                $persent = number_format($persent, 2);
-            }
-            $base = 80;
-            $this->registerJs("
-                        var obj_div=$('#ch1');
-                        gen_dial(obj_div,$base,$persent);
-                    ");
-            ?>
-            <center><h4>ร้อยละ</h4></center>
-            <div id="ch1"></div>
-        </div>
-    </div>
-</div>
-<div id="pie-donut">
-</div>
-<?php
-$title = "จำนวนผู้ป่วยที่อยู่ในเขต";
-$sql04780 = Yii::$app->db->createCommand("SELECT total FROM pop_loei WHERE hoscode = '04780'")->queryScalar();
-$sql04781 = Yii::$app->db->createCommand("SELECT total FROM pop_loei WHERE hoscode = '04781'")->queryScalar();
-$sql04776 = Yii::$app->db->createCommand("SELECT total FROM pop_loei WHERE hoscode = '04776'")->queryScalar();
-$sql04777 = Yii::$app->db->createCommand("SELECT total FROM pop_loei WHERE hoscode = '04777'")->queryScalar();
-$sql04778 = Yii::$app->db->createCommand("SELECT total FROM pop_loei WHERE hoscode = '04778'")->queryScalar();
-$sql13930 = Yii::$app->db->createCommand("SELECT total FROM pop_loei WHERE hoscode = '13930'")->queryScalar();
-$sql14353 = Yii::$app->db->createCommand("SELECT total FROM pop_loei WHERE hoscode = '14353'")->queryScalar();
-$sql14356 = Yii::$app->db->createCommand("SELECT total FROM pop_loei WHERE hoscode = '14356'")->queryScalar();
-$this->registerJs("$(function () {
+            $title = "จำนวนผู้ป่วยที่อยู่ในเขต";
+            $sql04780 = Yii::$app->db->createCommand("SELECT total FROM pop_loei WHERE hoscode = '04780'")->queryScalar();
+            $sql04781 = Yii::$app->db->createCommand("SELECT total FROM pop_loei WHERE hoscode = '04781'")->queryScalar();
+            $sql04776 = Yii::$app->db->createCommand("SELECT total FROM pop_loei WHERE hoscode = '04776'")->queryScalar();
+            $sql04777 = Yii::$app->db->createCommand("SELECT total FROM pop_loei WHERE hoscode = '04777'")->queryScalar();
+            $sql04778 = Yii::$app->db->createCommand("SELECT total FROM pop_loei WHERE hoscode = '04778'")->queryScalar();
+            $sql13930 = Yii::$app->db->createCommand("SELECT total FROM pop_loei WHERE hoscode = '13930'")->queryScalar();
+            $sql14353 = Yii::$app->db->createCommand("SELECT total FROM pop_loei WHERE hoscode = '14353'")->queryScalar();
+            $sql14356 = Yii::$app->db->createCommand("SELECT total FROM pop_loei WHERE hoscode = '14356'")->queryScalar();
+            $this->registerJs("$(function () {
                                     $('#pie-donut').highcharts({
                                         chart: {
                                             plotBackgroundColor: null,
@@ -254,8 +237,28 @@ $this->registerJs("$(function () {
                                     });
                                 });
                                 ");
-?>
-</div>
-<!-- end donut -->
-</div>
+            ?>
+        </div>
+        <!-- end donut -->
+    </div>
+    <div class="col-lg-12">
+        <div class="row">
+            <?php
+            $target = 20;
+            $result = 10;
+            $persent = 0.00;
+            if ($target > 0) {
+                $persent = $result / $target * 100;
+                $persent = number_format($persent, 2);
+            }
+            $base = 90;
+            $this->registerJs("
+var obj_div=$('‪#‎ch1‬');
+gen_dial(obj_div,$base,$persent);
+");
+            ?>
+            <center><h4>ร้อยละ</h4></center>
+            <div id="ch1"></div>
+        </div>
+    </div>
 </div>

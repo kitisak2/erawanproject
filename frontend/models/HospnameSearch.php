@@ -41,12 +41,16 @@ class HospnameSearch extends Hospname
      */
     public function search($params)
     {
-        $query = Hospname::find();
+        $query = Hospname::find()
+        ->orderBy (['(id)' => SORT_ASC]); // ASC
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+    'pagination' => [    //limit page แสดงผล
+            'pagesize' => 10,
+           ] 
         ]);
 
         $this->load($params);

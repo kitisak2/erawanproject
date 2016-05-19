@@ -2,9 +2,9 @@
 /* @var $this yii\web\View */
 
 use miloschuman\highcharts\Highcharts;
-//use yii\grid\GridView;
-use yii\helpers\Html; //เครื่องมือส่งออก
-use kartik\grid\GridView;
+use yii\grid\GridView;
+
+//use kartik\grid\GridView;
 $this->registerJsFile('./js/chart_dial.js');
 
 $this->title = 'Love Loei';
@@ -120,7 +120,6 @@ Yii::$app->db->open();
             <?php
             echo GridView::widget([
                 'dataProvider' => $dataProvider,
-                'panel' => [''],  //เครื่องมือส่งออก
                 'columns' => [
                     [
                         'class' => 'yii\grid\SerialColumn',
@@ -161,7 +160,7 @@ Yii::$app->db->open();
                 $persent = $result / $target * 100;
                 $persent = number_format($persent, 2);
             }
-            $base = 80;
+            $base = 90;
             $this->registerJs("
                         var obj_div=$('#ch1');
                         gen_dial(obj_div,$base,$persent);
@@ -172,90 +171,5 @@ Yii::$app->db->open();
         </div>
     </div>
 </div>
-<div id="pie-donut">
-</div>
-<?php
-$title = "จำนวนผู้ป่วยที่อยู่ในเขต";
-$sql04780 = Yii::$app->db->createCommand("SELECT total FROM pop_loei WHERE hoscode = '04780'")->queryScalar();
-$sql04781 = Yii::$app->db->createCommand("SELECT total FROM pop_loei WHERE hoscode = '04781'")->queryScalar();
-$sql04776 = Yii::$app->db->createCommand("SELECT total FROM pop_loei WHERE hoscode = '04776'")->queryScalar();
-$sql04777 = Yii::$app->db->createCommand("SELECT total FROM pop_loei WHERE hoscode = '04777'")->queryScalar();
-$sql04778 = Yii::$app->db->createCommand("SELECT total FROM pop_loei WHERE hoscode = '04778'")->queryScalar();
-$sql13930 = Yii::$app->db->createCommand("SELECT total FROM pop_loei WHERE hoscode = '13930'")->queryScalar();
-$sql14353 = Yii::$app->db->createCommand("SELECT total FROM pop_loei WHERE hoscode = '14353'")->queryScalar();
-$sql14356 = Yii::$app->db->createCommand("SELECT total FROM pop_loei WHERE hoscode = '14356'")->queryScalar();
-$this->registerJs("$(function () {
-                                    $('#pie-donut').highcharts({
-                                        chart: {
-                                            plotBackgroundColor: null,
-                                            plotBorderWidth: null,
-                                            plotShadow: false,
-                                            type: 'pie'
-                                        },
-                                        title: {
-                                            text: '$title'
-                                        },
-                                        tooltip: {
-                                            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-                                        },
-                                        plotOptions: {
-                                            pie: {
-                                                allowPointSelect: true,
-                                                cursor: 'pointer',
-                                                depth: 35,
-                                                dataLabels: {
-                                                    enabled: true,
-                                                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',    //  แสดง %
-                                                    style: {
-                                                        color:'black'                     
-                                                    },
-                                                    connectorColor: 'silver'
-                                                },
-                                                startAngle: -90,
-                                                endAngle: 90,
-                                                center: ['50%', '75%']
-                                            }
-                                        },
-                                        /*plotOptions: {
-                                            pie: {
-                                                dataLabels: {
-                                                    allowPointSelect: true,
-                                                    cursor: 'pointer',
-                                                    depth: 35,
-                                                    style: {
-                                                        color:'black',                 
-                                                    },
-                                                    connectorColor: 'silver'
-                                                },
-                                                startAngle: -90,
-                                                endAngle: 90,
-                                                center: ['50%', '75%']
-                                            }
-                                        },*/
-                                        legend: {
-                                            enabled: true
-                                        },
-                                        series: [{
-                                            type: 'pie',
-                                            name: 'ร้อยละ',
-                                            innerSize: '50%',
-                                            data: [
-                                            ['รพสต.ห้วยป่าน',   $sql04780],
-                                                ['รพสต.ซำบุ่น',   $sql04781],
-                                                    ['รพสต.หัวฝาย',   $sql04776],
-                                                        ['รพสต.โป่งศรีโทน',   $sql04777],
-                                                            ['รพสต.หนองใหญ่',   $sql04778],
-                                                                ['รพสต.โนนสวรรค์',   $sql13930],
-                                                                    ['รพสต.พรประเสริฐ',   $sql14353],
-                                                                        ['รพสต.นาอ่างคำ',   $sql14356],
-                                                   
-                                            ]
-                                        }]
-                                    });
-                                });
-                                ");
-?>
-</div>
-<!-- end donut -->
-</div>
+
 </div>
